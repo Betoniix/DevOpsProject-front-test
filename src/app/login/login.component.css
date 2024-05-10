@@ -1,0 +1,9 @@
+.boton-custom {
+   background: #435d7d;
+   color: #fff;
+}
+
+.form-check-input:checked {
+   background-color: #40587c;
+   border-color: #5b7fb6;
+}
