@@ -30,7 +30,6 @@ export class AsignacionesComponent implements OnInit {
 
   ngOnInit(): void {
     this.ObtenerAsignaciones();
-
     this.service
       .ObtenerConductores()
       .subscribe((response) => (this.conductores = response.data));
@@ -66,8 +65,9 @@ export class AsignacionesComponent implements OnInit {
         idVehiculo: parseInt(this.idVehiculo),
       })
       .subscribe((result) => {
-        alert(result.message);
-        this.ObtenerAsignaciones();
+        this.asignaciones = this.asignaciones.map((asignacion) =>
+          asignacion.id === result.data.id ? result.data : asignacion
+        );
       });
   }
 
@@ -84,16 +84,16 @@ export class AsignacionesComponent implements OnInit {
             idVehiculo: parseInt(this.nuevoIdVehiculo),
           })
           .subscribe((result) => {
-            alert(result.message);
+            this.asignaciones.push(result.data);
           });
-        this.ObtenerAsignaciones();
       });
   }
 
   EliminarAsignacion(id: number) {
-    this.service
-      .BorrarAsignacion(id)
-      .subscribe((result) => alert(result.message));
-    this.ObtenerAsignaciones();
+    this.service.BorrarAsignacion(id).subscribe((result) => {
+      this.asignaciones = this.asignaciones.filter(
+        (asignacion) => asignacion.id != id
+      );
+    });
   }
 }
