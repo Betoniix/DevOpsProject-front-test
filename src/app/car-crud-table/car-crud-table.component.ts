@@ -1,16 +1,20 @@
 import { Component } from '@angular/core';
 import {NgForOf} from "@angular/common";
+import {CarModalComponent} from "../car-modal/car-modal.component";
 
 @Component({
   selector: 'app-car-crud-table',
   standalone: true,
   imports: [
-    NgForOf
+    NgForOf,
+    CarModalComponent
   ],
   templateUrl: './car-crud-table.component.html',
   styleUrl: './car-crud-table.component.css'
 })
 export class CarCrudTableComponent {
+
+  showCreateCarModal: boolean = false;
 
   entries: any[] = [
     {
@@ -35,4 +39,12 @@ export class CarCrudTableComponent {
     },
     // Add more objects as needed
   ];
+
+  openCreateCarModal(){
+    this.showCreateCarModal = true;
+  }
+
+  closeCreateCarModal(){
+    this.showCreateCarModal = false;
+  }
 }
