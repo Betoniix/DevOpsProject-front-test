@@ -1,0 +1,13 @@
+<div class="modal" [ngClass]="{'show-modal': showModal}">
+  <div class="modal-content">
+    <span class="close" (click)="close()">&times;</span>
+    <h2>Form Modal</h2>
+    <form (ngSubmit)="submitForm()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required [(ngModel)]="formData.name"><br><br>
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required [(ngModel)]="formData.email"><br><br>
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</div>
