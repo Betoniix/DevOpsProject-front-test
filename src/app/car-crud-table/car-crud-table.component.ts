@@ -16,6 +16,11 @@ export class CarCrudTableComponent {
 
   showCreateCarModal: boolean = false;
 
+  formData = {
+    name: '',
+    email: ''
+  };
+
   entries: any[] = [
     {
       id: 1,
@@ -46,5 +51,10 @@ export class CarCrudTableComponent {
 
   closeCreateCarModal(){
     this.showCreateCarModal = false;
+  }
+
+  console(formData:any){
+    console.log(formData);
+    this.entries.push(formData);
   }
 }

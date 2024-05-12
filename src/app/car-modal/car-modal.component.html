@@ -3,10 +3,27 @@
     <span class="close" (click)="close()">&times;</span>
     <h2>Form Modal</h2>
     <form (ngSubmit)="submitForm()">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required [(ngModel)]="formData.name"><br><br>
-      <label for="email">Email:</label>
-      <input type="email" id="email" name="email" required [(ngModel)]="formData.email"><br><br>
+      <label for="name">Placa:</label>
+      <input type="text" id="name" name="name" required [(ngModel)]="formData.placa"><br><br>
+
+      <label for="marca">Marca:</label>
+      <input type="text" id="marca" name="marca" required [(ngModel)]="formData.marca"><br><br>
+
+      <label for="modelo">Modelo:</label>
+      <input type="text" id="modelo" name="modelo" required [(ngModel)]="formData.modelo"><br><br>
+
+      <label for="VIN">VIN:</label>
+      <input type="text" id="VIN" name="VIN" required [(ngModel)]="formData.VIN"><br><br>
+
+      <label for="costo">Costo:</label>
+      <input type="text" id="costo" name="costo" required [(ngModel)]="formData.costo"><br><br>
+
+      <label for="fecha_compra">Fecha de compra:</label>
+      <input type="date" id="fecha_compra" name="fecha_compra" required [(ngModel)]="formData.fecha_compra"><br><br>
+
+      <label for="url_foto">URL de la foto:</label>
+      <input type="url" id="url_foto" name="url_foto" required [(ngModel)]="formData.url_foto"><br><br>
+
       <button type="submit">Submit</button>
     </form>
   </div>

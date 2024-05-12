@@ -5,7 +5,7 @@
 </head>
 
 <body>
-<app-car-modal [showModal]="showCreateCarModal" (closeModal)="closeCreateCarModal()"></app-car-modal>
+<app-car-modal [showModal]="showCreateCarModal" (formSubmit)="console($event)" (closeModal)="closeCreateCarModal()"></app-car-modal>
 <div class="container-xl">
   <div class="table-responsive">
     <div class="table-wrapper">
@@ -35,8 +35,10 @@
           <th>Placa</th>
           <th>Marca</th>
           <th>Modelo</th>
+          <th>VIN</th>
           <th>Fecha de compra</th>
           <th>Costo</th>
+          <th>Foto</th>
         </tr>
         </thead>
         <tbody>

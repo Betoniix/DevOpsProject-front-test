@@ -16,7 +16,8 @@ export class CarModalComponent {
   @Input() showModal: boolean = false;
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   @Output() formSubmit: EventEmitter<any> = new EventEmitter();
-  formData = { name: '', email: '' };
+  formData = { placa: '', marca: '', modelo: '', VIN: '', costo: '', fecha_compra: '',
+    url_foto: ''};
 
   close(){
     this.closeModal.emit();
