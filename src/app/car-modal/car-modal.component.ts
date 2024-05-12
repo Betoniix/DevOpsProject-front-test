@@ -14,11 +14,20 @@ import {NgClass} from "@angular/common";
 })
 export class CarModalComponent {
   @Input() showModal: boolean = false;
+  @Input() data: any;
+  @Input() mode: 'create' | 'update' = 'create';
+  isEditMode: boolean = false;
   @Output() closeModal: EventEmitter<void> = new EventEmitter<void>();
   @Output() formSubmit: EventEmitter<any> = new EventEmitter();
-  formData = { placa: '', marca: '', modelo: '', VIN: '', costo: '', fecha_compra: '',
+  formData = {id: '', placa: '', marca: '', modelo: '', VIN: '', costo: '', fecha_compra: '',
     url_foto: ''};
 
+  ngOnChanges() {
+    this.isEditMode = !!this.data;
+    if(this.mode === 'update'){
+      this.setFormInfo(this.data);
+    }
+  }
   close(){
     this.closeModal.emit();
   }
@@ -27,5 +36,9 @@ export class CarModalComponent {
     // Emit an event with the form data to inform parent component about form submission
     this.formSubmit.emit(this.formData);
     // You can perform additional form submission logic here if needed
+  }
+
+  setFormInfo(data:any){
+    this.formData = data;
   }
 }
