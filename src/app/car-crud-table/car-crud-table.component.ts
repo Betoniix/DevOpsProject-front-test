@@ -2,13 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {NgForOf} from "@angular/common";
 import {CarModalComponent} from "../car-modal/car-modal.component";
 import {CarService} from "../services/car.service";
+import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-car-crud-table',
   standalone: true,
   imports: [
     NgForOf,
-    CarModalComponent
+    CarModalComponent,
+    NgbToast
   ],
   templateUrl: './car-crud-table.component.html',
   styleUrl: './car-crud-table.component.css'
@@ -18,14 +20,16 @@ export class CarCrudTableComponent implements OnInit{
   modalMode: 'create' | 'update' = 'create'; // Default to 'create'
   showCreateCarModal: boolean = false;
   selectedCar: any;
-  private todos: any[] | undefined;
   entries: any[] = [];
 
   constructor(private carService: CarService) {
   }
 
   ngOnInit(): void {
-    console.log("hola");
+    this.getCars();
+  }
+
+  getCars(){
     this.carService.getCars().subscribe(cars => this.entries = cars);
   }
 
@@ -44,20 +48,36 @@ export class CarCrudTableComponent implements OnInit{
     this.showCreateCarModal = true;
   }
 
-  updateEntry(formData:any){
-    let index = this.entries.findIndex(entry => entry.id === formData.id);
-    if (index !== -1) {
-      this.entries[index].placa = formData.placa;
-      this.entries[index].marca = formData.marca;
-      this.entries[index].modelo = formData.modelo;
-      this.entries[index].VIN = formData.VIN;
-      this.entries[index].fecha_compra = formData.fecha_compra;
-      this.entries[index].costo = formData.costo;
-      this.entries[index].url_foto = formData.url_foto;
-    }
+  deleteCar(indexToDelete:any){
+    this.selectedCar = this.entries[parseInt(indexToDelete)];
+    let id = this.selectedCar.id;
+    console.log(id);
+    this.carService.deleteCar(id).subscribe(() => {
+      this.getCars();
+    });
   }
 
-  deleteCar(indexToDelete:number){
-    this.entries.splice(indexToDelete, 1);
+  createCar(formData:any){
+    this.carService.addCar(formData).subscribe(() => {
+      this.getCars();
+      this.closeCreateCarModal();
+    });
+  }
+
+  updateCar(id:number, formData:any){
+    console.log(id);
+    console.log(formData);
+    this.carService.updateCar(id,formData).subscribe(() => {
+      this.getCars();
+      this.closeCreateCarModal();
+    });
+  }
+  modalDataHandler(formData:any){
+    if(this.modalMode === 'create'){
+      this.createCar(formData);
+    }
+    else {
+      this.updateCar(formData.id,formData);
+    }
   }
 }

@@ -5,7 +5,8 @@
 </head>
 
 <body>
-<app-car-modal [showModal]="showCreateCarModal" [mode]="modalMode" [data]="selectedCar" (formSubmit)=updateEntry($event)
+<app-car-modal [showModal]="showCreateCarModal" [mode]="modalMode" [data]="selectedCar"
+               (formSubmit)=modalDataHandler($event)
                (closeModal)="closeCreateCarModal()">
 </app-car-modal>
 <div class="container-xl">

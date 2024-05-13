@@ -33,9 +33,7 @@ export class CarModalComponent {
   }
 
   submitForm() {
-    // Emit an event with the form data to inform parent component about form submission
     this.formSubmit.emit(this.formData);
-    // You can perform additional form submission logic here if needed
   }
 
   setFormInfo(data:any){
