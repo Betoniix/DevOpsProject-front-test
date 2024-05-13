@@ -23,18 +23,12 @@
               <h2>Asignaciones</h2>
             </div>
             <div class="col-sm-6">
-              <button type="button" class="btn btn-danger">
-                <i class="material-icons">&#xE15C; </i>
-                <span>Eliminar</span>
-              </button>
-              <button
+              <a
                 (click)="AbrirNuevaAsignacionModal(nuevo)"
-                type="button"
                 class="btn btn-success"
+                data-toggle="modal"
+                ><i class="material-icons">&#xE147;</i> <span>Añadir</span></a
               >
-                <i class="material-icons">&#xE147;</i>
-                <span>Añadir</span>
-              </button>
             </div>
           </div>
         </div>
@@ -71,22 +65,25 @@
               <td>{{ asignacion.vehiculo.placa }}</td>
               <td>{{ asignacion.ruta.nombre_ruta ?? "Sin ruta" }}</td>
               <td>
-                <button
-                  class="btn btn-primary"
+                <a
                   (click)="AbrirEditarModal(editar, asignacion)"
-                >
-                  <i class="material-icons" data-toggle="tooltip" title="Edit"
+                  class="edit"
+                  data-toggle="modal"
+                  ><i class="material-icons" data-toggle="tooltip" title="Edit"
                     >&#xE254;</i
-                  >
-                </button>
-                <button
-                  class="btn btn-danger"
-                  (click)="EliminarAsignacion(asignacion.id)"
+                  ></a
                 >
-                  <i class="material-icons" data-toggle="tooltip" title="Delete"
+                <a
+                  (click)="EliminarAsignacion(asignacion.id)"
+                  class="delete"
+                  data-toggle="modal"
+                  ><i
+                    class="material-icons"
+                    data-toggle="tooltip"
+                    title="Delete"
                     >&#xE872;</i
-                  >
-                </button>
+                  ></a
+                >
               </td>
             </tr>
             }
