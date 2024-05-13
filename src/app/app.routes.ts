@@ -11,5 +11,6 @@ export const routes: Routes = [
   { path: 'manage', component: CrudTableComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'asignation', component: AsignacionesComponent },
-  { path: 'manage-conductores', component: CrudConductoresComponent}
+  { path: 'manage-conductores', component: CrudConductoresComponent },
+  { path: 'manage-admin', component: CrudAdminsComponent }
 ];

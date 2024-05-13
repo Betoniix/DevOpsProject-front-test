@@ -20,9 +20,9 @@ export type NuevaAsignacion = {
   providedIn: 'root',
 })
 export class AsignacionesService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
-  url_base = 'http://localhost:3300';
+  url_base = 'http://localhost:3301';
 
   RecuperarAsignaciones() {
     return this.http.get<Respuesta<Asignacion[]>>(
