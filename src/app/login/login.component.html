@@ -24,12 +24,14 @@
                   <div class="row gy-3 gy-md-4 overflow-hidden">
                      <div class="col-12">
                         <label for="email" class="form-label">Correo<span class="text-danger">*</span></label>
-                        <input type="email" class="form-control" name="email" id="email"
+                        <input type="email" class="form-control" [formControl]="correo" name="email" id="email"
                            placeholder="nombre@ejemplo.com" required>
                      </div>
+
                      <div class="col-12">
                         <label for="password" class="form-label">Contraseña <span class="text-danger">*</span></label>
-                        <input type="password" class="form-control" name="password" id="password" value="" required>
+                        <input type="password" class="form-control" [formControl]="contrasenia" name="password"
+                           id="password" value="" required>
                      </div>
                      <div class="col-12">
                         <div class="form-check">
@@ -41,8 +43,7 @@
                      </div>
                      <div class="col-12">
                         <div class="d-grid">
-                           <button class="btn bsb-btn-xl boton-custom" data-bs-toggle="modal"
-                              data-bs-target="#exampleModal" type="submit">Inicar sesión</button>
+                           <button class="btn bsb-btn-xl boton-custom" (click)="onSubmit()">Iniciar sesión</button>
                         </div>
                      </div>
                   </div>
