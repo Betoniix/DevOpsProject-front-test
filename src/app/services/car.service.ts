@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {map, Observable} from "rxjs";
+import {HttpClient, HttpErrorResponse, HttpHeaders} from "@angular/common/http";
+import {catchError, map, Observable, throwError} from "rxjs";
 import {Car} from "../interfaces/car.interface";
 
 @Injectable({
@@ -8,15 +8,17 @@ import {Car} from "../interfaces/car.interface";
 })
 export class CarService {
 
-  private baseUrl = 'http://localhost:3000';
+  private baseUrl = 'http://localhost:3301';
 
   constructor(private http: HttpClient) { }
 
   getCars(): Observable<Car[]> {
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxLCJpYXQiOjE3MTU1NTQ4NzMsImV4cCI6MTcxNTU5ODA3M30._WiVhcxkemkousKAEi9r_jXK9BiDrnAPKUsbDqOFJuE'
-    });
-    return this.http.get<Car[]>(`${this.baseUrl}/vehiculos`, {headers}).pipe(map((response:any) => response.data));
+    return this.http.get<Car[]>(`${this.baseUrl}/vehiculos`)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
+      .pipe(map((response:any) => response.data));
   }
 
   addCar(carData: any): Observable<Car[]>{
@@ -24,14 +26,19 @@ export class CarService {
       'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxLCJpYXQiOjE3MTU1NTQ4NzMsImV4cCI6MTcxNTU5ODA3M30._WiVhcxkemkousKAEi9r_jXK9BiDrnAPKUsbDqOFJuE'
     });
     return this.http.post<Car[]>(`${this.baseUrl}/vehiculos`, carData,{headers})
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
       .pipe(map((response:any) => response.data));
   }
 
   updateCar(id:number, carData:any){
-    const headers = new HttpHeaders({
-      'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoxLCJpYXQiOjE3MTU1NTQ4NzMsImV4cCI6MTcxNTU5ODA3M30._WiVhcxkemkousKAEi9r_jXK9BiDrnAPKUsbDqOFJuE'
-    });
-    return this.http.put<Car[]>(`${this.baseUrl}/vehiculos/${id}`, carData,{headers})
+    return this.http.put<Car[]>(`${this.baseUrl}/vehiculos/${id}`, carData)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
       .pipe(map((response:any) => response.data));
   }
 

@@ -1,15 +1,16 @@
 import { Component, OnInit, TemplateRef, inject } from '@angular/core';
 import { AsignacionesService } from './asignaciones.service';
 import { Asignacion } from './asignaciones.interface';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal, NgbToast} from '@ng-bootstrap/ng-bootstrap';
 import { Coductor } from './conductores.interface';
 import { Vehiculo } from './vehiculos.interface';
 import { FormsModule } from '@angular/forms';
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-asignaciones',
   standalone: true,
-  imports: [FormsModule],
+    imports: [FormsModule, NgIf, NgbToast],
   templateUrl: './asignaciones.component.html',
   styleUrl: './asignaciones.component.css',
 })
@@ -20,6 +21,8 @@ export class AsignacionesComponent implements OnInit {
   edicionAsignacion!: Asignacion;
   conductores: Coductor[] = [];
   vehiculos: Vehiculo[] = [];
+  showToast:boolean = false;
+  toastContent:string = '';
 
   idAsignacion!: number;
   idVehiculo!: string;
@@ -85,10 +88,17 @@ export class AsignacionesComponent implements OnInit {
           })
           .subscribe((result) => {
             this.asignaciones.push(result.data);
-          });
+          },
+            (error) =>{
+              this.toastContent = error.message;
+              this.toggleToast();
+            });
       });
   }
 
+  toggleToast() {
+    this.showToast = !this.showToast;
+  }
   EliminarAsignacion(id: number) {
     this.service.BorrarAsignacion(id).subscribe((result) => {
       this.asignaciones = this.asignaciones.filter(

@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
 import { Conductor } from '../interfaces/conductor.interface';
 
 @Injectable({
@@ -14,26 +14,45 @@ export class ConductorService {
 
   obtenerConductores(): Observable<any> {
     const url = `${this.apiUrl}/conductores/`;
-    return this.http.get(url);
+    return this.http.get(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
   obtenerConductor(id: number): Observable<any> {
     const url = `${this.apiUrl}/conductores/${id}`;
-    return this.http.get(url);
+    return this.http.get(url)      .pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error.error); // Return a new Observable with the error
+      }));
   }
 
   editarConductor(id: number, administrador: Conductor): Observable<any> {
     const url = `${this.apiUrl}/conductores/${id}`;
-    return this.http.put(url, administrador);
+    return this.http.put(url, administrador)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));;
   }
 
   agregarConductor(conductor: Conductor): Observable<any> {
     const url = `${this.apiUrl}/conductores`;
-    return this.http.post(url, conductor);
+    return this.http.post(url, conductor)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
   eliminarConductor(id: number): Observable<any> {
     const url = `${this.apiUrl}/conductores/${id}`;
-    return this.http.delete(url);
+    return this.http.delete(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 }
