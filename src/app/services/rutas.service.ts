@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { Ruta } from '../interface/ruta';
+import { Observable, map } from 'rxjs';
+import { Ruta } from '../interfaces/ruta.interface';
+import { Respuesta } from '../asignaciones/respuesta.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,10 @@ export class RutasService {
 
   private apiUrl = "http://localhost:3301";
 
-  obtenerRutas(): Observable<any> {
+
+  obtenerRutas() {
     const url = `${this.apiUrl}/rutas/`;
-    return this.http.get(url);
+    return this.http.get<Ruta[]>(url).pipe(map((response: any) => response.data));
   }
 
   obtenerRuta(id: number): Observable<any> {

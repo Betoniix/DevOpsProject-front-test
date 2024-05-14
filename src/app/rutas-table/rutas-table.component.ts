@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
-import { Ruta } from '../interface/ruta';
+import { Ruta } from '../interfaces/ruta.interface';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -12,8 +12,8 @@ import { CommonModule } from '@angular/common';
   templateUrl: './rutas-table.component.html',
   styleUrl: './rutas-table.component.css'
 })
-export class RutasTableComponent implements OnInit{
-  rutas: any[] | undefined;
+export class RutasTableComponent implements OnInit {
+  rutas: Ruta[] = [];
   formulario: FormGroup; // Define FormGroup
   rutaSeleccionada: Ruta | null = null;
   idRutas: any = '';
@@ -49,14 +49,15 @@ export class RutasTableComponent implements OnInit{
 
   obtenerRutas(): void {
     this.rutaService.obtenerRutas().subscribe(
-      (data: any) => {
-        this.rutas = data;
+      (rutas) => {
+        this.rutas = rutas.data // Accediendo correctamente a la propiedad 'data'
       },
       (error) => {
         console.error('Error al obtener rutas', error);
       }
     );
   }
+
 
   eliminarRuta(id: any) {
     this.rutaService.eliminarRuta(id).subscribe(
@@ -142,7 +143,7 @@ export class RutasTableComponent implements OnInit{
         comentarios: (ruta.comentarios),
         id_asignacion: (ruta.id_asignacion)
       });
-      
+
     }
 
   }
