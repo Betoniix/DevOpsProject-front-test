@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
 import { Ruta } from '../interface/ruta';
@@ -14,15 +14,11 @@ import { CommonModule } from '@angular/common';
 })
 export class RutasTableComponent implements OnInit{
   rutas: any[] | undefined;
-  formulario: FormGroup; // Define FormGroup
+  idRuta: any = '';
   rutaSeleccionada: Ruta | null = null;
-  idRutas: any = '';
-  addRutaForm: any;
-  this: any;
-  addConductorForm: any;
 
-  constructor(private rutaService: RutasService, private router: Router) {
-    this.formulario = new FormGroup({ // Inicializa FormGroup
+
+  public addRutaForm: FormGroup = new FormGroup({ // Inicializa FormGroup
       nombre_ruta: new FormControl(''),
       long_empresa: new FormControl(''),
       lat_empresa: new FormControl(''),
@@ -33,9 +29,11 @@ export class RutasTableComponent implements OnInit{
       exitoso: new FormControl(''),
       descripcion_problema: new FormControl(''),
       comentarios: new FormControl(''),
-      id_asignacion: new FormControl(''),
+      id_asignacion: new FormControl(0),
     });
-  }
+  
+
+  constructor(private rutaService: RutasService) { }
 
   ngOnInit(): void {
     this.obtenerRutas();
@@ -43,14 +41,18 @@ export class RutasTableComponent implements OnInit{
 
   capturarRuta(ruta: any) {
     this.rutaSeleccionada = ruta;
-    this.idRutas = ruta.id;
-    this.rellenarFormulario(); // Llama a rellenarFormulario() al seleccionar un administrador
+    this.actualizarRutaForm(ruta); // Llama a rellenarFormulario() al seleccionar un administrador
+  }
+
+  resetRuta(): void {
+    this.addRutaForm.reset();
   }
 
   obtenerRutas(): void {
     this.rutaService.obtenerRutas().subscribe(
       (data: any) => {
         this.rutas = data;
+        
       },
       (error) => {
         console.error('Error al obtener rutas', error);
@@ -72,7 +74,7 @@ export class RutasTableComponent implements OnInit{
 
   rellenarFormulario() {
     if (this.rutaSeleccionada) {
-      this.formulario.patchValue({ // Usa patchValue para rellenar el formulario
+      this.addRutaForm.patchValue({ // Usa patchValue para rellenar el formulario
         nombre_ruta: this.rutaSeleccionada.nombre_ruta,
         long_empresa: this.rutaSeleccionada.long_empresa,
         lat_empresa: this.rutaSeleccionada.lat_empresa,
@@ -85,23 +87,6 @@ export class RutasTableComponent implements OnInit{
         comentarios: this.rutaSeleccionada.comentarios,
         id_asignacion: this.rutaSeleccionada.id_asignacion
       });
-    }
-  }
-
-  editarAdmin() {
-    if (this.formulario.valid) {
-      const ruta = this.formulario.value;
-      this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
-        (data: Ruta) => {
-          this.rutaSeleccionada = data;
-          this.refreshPage();
-        },
-        (error) => {
-          console.error('Error al editar ruta', error);
-        }
-      );
-    } else {
-      console.error('El formulario es inválido');
     }
   }
 
@@ -119,7 +104,7 @@ export class RutasTableComponent implements OnInit{
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      id_asignacion: this.addRutaForm.value.id_asignacion,
     };
 
   }
@@ -161,10 +146,10 @@ export class RutasTableComponent implements OnInit{
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      id_asignacion: this.addRutaForm.value.id_asignacion,
     };
 
-    this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
+    this.rutaService.editarRutas(this.idRuta, ruta).subscribe(
       (data: Ruta) => {
         this.rutaSeleccionada = data;
         console.log(ruta);
@@ -179,5 +164,6 @@ export class RutasTableComponent implements OnInit{
 
   refreshPage() {
     window.location.reload();
-  };
+  }
+
 }
