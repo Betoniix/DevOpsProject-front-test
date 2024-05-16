@@ -85,7 +85,7 @@ export class RutasTableComponent implements OnInit{
         exitoso: this.rutaSeleccionada.exitoso,
         descripcion_problema: this.rutaSeleccionada.descripcion_problema,
         comentarios: this.rutaSeleccionada.comentarios,
-        id_asignacion: this.rutaSeleccionada.id_asignacion
+        id_asignacion: this.rutaSeleccionada.id_asignacion,
       });
     }
   }
@@ -104,8 +104,9 @@ export class RutasTableComponent implements OnInit{
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.addRutaForm.value.id_asignacion,
+      id_asignacion: parseInt(this.addRutaForm.value.id_asignacion),
     };
+    console.log(ruta);
 
   }
 
@@ -146,7 +147,7 @@ export class RutasTableComponent implements OnInit{
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.addRutaForm.value.id_asignacion,
+      id_asignacion: parseInt(this.addRutaForm.value.id_asignacion),
     };
 
     this.rutaService.editarRutas(this.idRuta, ruta).subscribe(
