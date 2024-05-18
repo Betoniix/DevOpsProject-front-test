@@ -19,6 +19,7 @@ export class LoginComponent {
 
   constructor(private loginService: LoginService, private http: HttpClient, private router: Router) { }
 
+
   onSubmit() {
 
     // Obtener los valores actuales de matrícula y contraseña desde los FormControl
@@ -33,7 +34,7 @@ export class LoginComponent {
         const accessToken = data.data.access; // Obtener el token de la respuesta
         this.loginService.setToken(accessToken); // Llamar al método setToken del servicio con el token
         //this.router.navigateByUrl('/dashboard'); esto se pondrá cuando ya terminemos todo
-        this.router.navigateByUrl('/register');
+        this.router.navigateByUrl('/dashboard');
       },
       (error) => {
         console.error('Error en la solicitud a la API', error);

@@ -5,6 +5,7 @@
 </head>
 
 <body>
+
    <div class="container-xl">
       <div class="table-responsive">
          <div class="table-wrapper">
@@ -14,10 +15,11 @@
                      <h2><b>Rutas</b></h2>
                   </div>
                   <div class="col-sm-6">
-                     <a data-bs-target="#agregarRutaModal" class="btn btn-success" data-toggle="modal"><i
-                           class="material-icons">&#xE147;</i> <span>Agregar Nueva Ruta</span></a>
-                     <a data-bs-target="#eliminarRutaModal" class="btn btn-danger" data-toggle="modal"><i
+
+                     <a class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#eliminarRutaModal"><i
                            class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>
+                     <a class="btn btn-success" data-bs-toggle="modal" data-bs-target="#agregarRutaModal"
+                        (click)="resetRuta()"><i class="material-icons">&#xE147;</i> <span>Añadir</span></a>
                   </div>
                </div>
             </div>
@@ -37,6 +39,8 @@
                      <th>Éxito de la ruta</th>
                      <th>Descripcion</th>
                      <th>Comentarios</th>
+                     <th>Fecha de creación</th>
+                     <th>Id. Asignación</th>
                      <th>Acciones</th>
                   </tr>
                </thead>
@@ -48,22 +52,21 @@
                            <label for="checkbox5"></label>
                         </span>
                      </td>
-                     <td>{{ ruta.id }}</td>
                      <td>{{ ruta.nombre_ruta }}</td>
                      <td>{{ ruta.long_empresa + ", " + ruta.lat_empresa}}</td>
                      <td>{{ ruta.long_destino + ", " + ruta.lat_destino}}</td>
                      <td>{{ ruta.fecha_recorrido }}</td>
                      <td>{{ ruta.exitoso }}</td>
-                     <td>{{ ruta.fecha_creacion }}</td>
-                     <td>{{ ruta.exitoso }}</td>
                      <td>{{ ruta.descripcion_problema }}</td>
                      <td>{{ ruta.comentarios }}</td>
+                     <td>{{ ruta.fecha_creacion }}</td>
+                     <td>{{ ruta.id_asignacion }}</td>
                      <td>
                         <a class="edit" data-bs-toggle="modal" data-bs-target="#editarRutaModal"
                            (click)="capturarRuta(ruta)"><i class="material-icons" data-toggle="tooltip"
                               title="Edit">&#xE254;</i></a>
                         <a class="delete" data-bs-toggle="modal" data-bs-target="#eliminarRutaModal"
-                           (click)="capturarRuta(ruta.id)"><i class="material-icons" data-toggle="tooltip"
+                           (click)="capturarId(ruta.id)"><i class="material-icons" data-toggle="tooltip"
                               title="Delete">&#xE872;</i></a>
                      </td>
                   </tr>
@@ -93,13 +96,11 @@
             <form [formGroup]="addRutaForm">
                <div class="modal-header">
                   <h4 class="modal-title">Agregar ruta</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                </div>
                <div class="modal-body">
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Nombre</label>
-                     <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre_ruta"
-                        required>
+                     <input type="text" class="form-control" formControlName="nombre_ruta" required>
                   </div>
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Ubicación de la empresa (Longitud)</label>
@@ -120,31 +121,37 @@
                   </div>
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Fecha de recorrido</label>
-                     <input type="text" class="form-control" formControlName="fecha_recorrido" required>
+                     <input type="date" class="form-control" formControlName="fecha_recorrido" required>
                   </div>
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Fecha de creación</label>
-                     <input type="text" class="form-control" formControlName="fecha_creacion" required>
+                     <input type="date" class="form-control" formControlName="fecha_creacion" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
-                     <label>Resultado de la ruta</label>
-                     <input type="text" class="form-control" formControlName="exitoso" required>
+                  <label>Resultado de la ruta</label>
+                  <div class="form-check">
+                     <input type="radio" class="form-check-input" id="exitoso" formControlName="exitoso" value="1">
+                     <label class="form-check-label" for="exitoso">Exitoso</label>
                   </div>
+                  <div class="form-check">
+                     <input type="radio" class="form-check-input" id="fallido" formControlName="exitoso" value="0">
+                     <label class="form-check-label" for="fallido">Fallido</label>
+                  </div>
+
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Descripción</label>
-                     <input type="text-area" class="form-control" formControlName="descripcion_problema" required>
+                     <textarea class="form-control" formControlName="descripcion_problema" required></textarea>
                   </div>
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Comentarios</label>
-                     <input type="text" class="form-control" formControlName="comentarios" required>
+                     <textarea class="form-control" formControlName="comentarios" required></textarea>
                   </div>
                   <div class="form-group" [formGroup]="addRutaForm">
-                     <label>idasignacion</label>
-                     <input type="text-area" class="form-control" formControlName="id_asignacion" required>
+                     <label>Id de asignación</label>
+                     <input type="number" class="form-control" formControlName="id_asignacion" required>
                   </div>
                </div>
                <div class="modal-footer">
-                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                  <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancelar">
                   <input type="submit" class="btn btn-success" value="Agregar" [disabled]="!addRutaForm.valid"
                      (click)="agregarRutas()">
                </div>
@@ -190,27 +197,34 @@
                      <label>Fecha de creación</label>
                      <input type="text" class="form-control" formControlName="fecha_creacion" required>
                   </div>
-                  <div class="form-group">
-                     <label>Resultado de la ruta</label>
-                     <input type="text" class="form-control" formControlName="exitoso" required>
+                  <label>Resultado de la ruta</label>
+                  <div class="form-check">
+                     <input type="radio" class="form-check-input" id="exitoso" formControlName="exitoso" value="1">
+                     <label class="form-check-label" for="exitoso">Exitoso</label>
                   </div>
+                  <div class="form-check">
+                     <input type="radio" class="form-check-input" id="fallido" formControlName="exitoso" value="0">
+                     <label class="form-check-label" for="fallido">Fallido</label>
+                  </div>
+
                   <div class="form-group">
                      <label>Descripción</label>
-                     <input type="text-area" class="form-control" formControlName="descripcion_problema" required>
+                     <textarea class="form-control" formControlName="descripcion_problema" required></textarea>
                   </div>
                   <div class="form-group">
                      <label>Comentarios</label>
-                     <input type="text" class="form-control" formControlName="comentarios" required>
+                     <textarea class="form-control" formControlName="comentarios" required></textarea>
                   </div>
                   <div class="form-group">
-                     <label>idasignacion</label>
+                     <label>Id de asignacion</label>
                      <input type="text-area" class="form-control" formControlName="id_asignacion" required>
                   </div>
 
                </div>
                <div class="modal-footer">
                   <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancelar">
-                  <input type="submit" class="btn btn-info" value="Guardar">
+                  <input type="submit" class="btn btn-info" value="Guardar" [disabled]="!addRutaForm.valid"
+                     (click)="editarRuta(idRuta)">
                </div>
             </form>
          </div>
@@ -223,15 +237,14 @@
             <form>
                <div class="modal-header">
                   <h4 class="modal-title">Eliminar ruta</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                </div>
                <div class="modal-body">
-                  <p>Estas segurx de que quieres eliminar esta ruta?</p>2
+                  <p>Estas segurx de que quieres eliminar esta ruta?</p>{{idRuta}}
                   <p class="text-warning"><small>No hay vuelta atrás.</small></p>
                </div>
                <div class="modal-footer">
-                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
-                  <input type="submit" class="btn btn-danger" value="Eliminar">
+                  <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancelar">
+                  <input type="submit" class="btn btn-danger" value="Eliminar" (click)="eliminarRuta(idRuta)">
                </div>
             </form>
          </div>

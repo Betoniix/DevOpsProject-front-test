@@ -1,4 +1,4 @@
-export interface Ruta {
+export interface RutaSinId {
     id: number;
     nombre_ruta: string;
     long_empresa: string;
@@ -10,5 +10,4 @@ export interface Ruta {
     exitoso: boolean;
     descripcion_problema: string;
     comentarios: string;
-    id_asignacion: number;
 }

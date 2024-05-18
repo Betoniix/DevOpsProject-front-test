@@ -10,8 +10,8 @@ describe('RutasTableComponent', () => {
     await TestBed.configureTestingModule({
       imports: [RutasTableComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(RutasTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

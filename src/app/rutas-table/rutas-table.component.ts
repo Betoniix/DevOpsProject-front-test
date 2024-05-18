@@ -4,6 +4,7 @@ import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
 import { Ruta } from '../interfaces/ruta.interface';
 import { CommonModule } from '@angular/common';
+import { RutaSinId } from '../interfaces/rutaSinId.interface';
 
 @Component({
   selector: 'app-rutas-table',
@@ -16,6 +17,8 @@ export class RutasTableComponent implements OnInit {
   rutas: any[] | undefined;
   idRuta: any = '';
   rutaSeleccionada: Ruta | null = null;
+  toastContent: string = '';
+  showToast: boolean = false;
 
 
   public addRutaForm: FormGroup = new FormGroup({ // Inicializa FormGroup
@@ -41,13 +44,24 @@ export class RutasTableComponent implements OnInit {
 
   capturarRuta(ruta: any) {
     this.rutaSeleccionada = ruta;
+    this.idRuta = ruta.id;
+    console.log("esta es la ruta sleccionada" + this.idRuta);
     this.actualizarRutaForm(ruta); // Llama a rellenarFormulario() al seleccionar un administrador
+  }
+
+  capturarId(id: string) {
+    this.idRuta = id;
+  }
+
+  resetRuta(): void {
+    this.addRutaForm.reset();
   }
 
   obtenerRutas(): void {
     this.rutaService.obtenerRutas().subscribe(
       (data: any) => {
         this.rutas = data;
+        console.log(this.rutas);
 
       },
       (error) => {
@@ -63,7 +77,7 @@ export class RutasTableComponent implements OnInit {
         this.refreshPage();
       },
       (error) => {
-        console.error('Error al eliminar administrador', error);
+        console.error('Error al eliminar ruta', error);
       }
     );
   }
@@ -81,12 +95,10 @@ export class RutasTableComponent implements OnInit {
         exitoso: this.rutaSeleccionada.exitoso,
         descripcion_problema: this.rutaSeleccionada.descripcion_problema,
         comentarios: this.rutaSeleccionada.comentarios,
-        id_asignacion: this.rutaSeleccionada.id_asignacion
+        id_asignacion: this.rutaSeleccionada.id_asignacion,
       });
     }
   }
-
-
 
   agregarRutas(): void {
 
@@ -97,14 +109,31 @@ export class RutasTableComponent implements OnInit {
       lat_empresa: this.addRutaForm.value.lat_empresa,
       long_destino: this.addRutaForm.value.long_destino,
       lat_destino: this.addRutaForm.value.lat_destino,
-      fecha_recorrido: this.addRutaForm.value.fecha_recorrido,
-      fecha_creacion: this.addRutaForm.value.fecha_creacion,
-      exitoso: this.addRutaForm.value.exitoso,
+      fecha_recorrido: new Date(this.addRutaForm.value.fecha_recorrido).toISOString(),
+      fecha_creacion: new Date(this.addRutaForm.value.fecha_creacion).toISOString(),
+      exitoso: Boolean(Number(this.addRutaForm.value.exitoso)),
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.addRutaForm.value.id_asignacion,
+      id_asignacion: parseInt(this.addRutaForm.value.id_asignacion),
     };
+    console.log(ruta);
 
+    this.rutaService.agregarRutas(ruta).subscribe(
+      (data: any) => {
+        console.log('Ruta agregada exitosamente:', data);
+        this.refreshPage();
+      },
+      (error: any) => {
+        console.log("ESTA ES LA RUTA:" + JSON.stringify(ruta));
+        console.error('Error al agregar ruta:', error);
+        this.toastContent = error.message;
+        this.toggleToast();
+      }
+    );
+
+  }
+  toggleToast() {
+    this.showToast = !this.showToast;
   }
 
   actualizarRutaForm(ruta: any): void {
@@ -132,8 +161,8 @@ export class RutasTableComponent implements OnInit {
 
   editarRuta(id: any) {
     // Verificar si this.conductorSeleccionado no es nulo
-    const ruta: Ruta = {
-      id: this.addRutaForm.value.id,
+    const ruta: RutaSinId = {
+      id: id,
       nombre_ruta: this.addRutaForm.value.nombre_ruta,
       long_empresa: this.addRutaForm.value.long_empresa,
       lat_empresa: this.addRutaForm.value.lat_empresa,
@@ -143,8 +172,7 @@ export class RutasTableComponent implements OnInit {
       fecha_creacion: this.addRutaForm.value.fecha_creacion,
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
-      comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.addRutaForm.value.id_asignacion,
+      comentarios: this.addRutaForm.value.comentarios
     };
 
     this.rutaService.editarRutas(this.idRuta, ruta).subscribe(
@@ -155,6 +183,7 @@ export class RutasTableComponent implements OnInit {
       },
       (error) => {
         console.error('Error al editar ruta', error);
+        console.log("Esta es la id" + ruta.id);
         console.log(ruta);
       }
     );
@@ -162,5 +191,6 @@ export class RutasTableComponent implements OnInit {
 
   refreshPage() {
     window.location.reload();
-  };
+  }
+
 }
