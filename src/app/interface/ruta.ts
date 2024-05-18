@@ -7,7 +7,7 @@ export interface Ruta {
     lat_destino: string;
     fecha_recorrido: string;
     fecha_creacion: string;
-    exitoso: string;
+    exitoso: boolean;
     descripcion_problema: string;
     comentarios: string;
     id_asignacion: number;

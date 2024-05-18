@@ -17,6 +17,6 @@ export const routes: Routes = [
   { path: 'manage-conductores', component: CrudConductoresComponent },
   { path: 'manage-admin', component: CrudAdminsComponent },
   { path: 'cars', component: CarCrudTableComponent },
-  { path: 'manage-rutas', component: RutasTableComponent}
+  { path: 'manage-rutas', component: RutasTableComponent},
   { path: 'dashboard', component: DashboardComponent}
 ];
