@@ -14,9 +14,9 @@
                      <h2><b>Rutas</b></h2>
                   </div>
                   <div class="col-sm-6">
-                     <a href="#agregarRutaModal" class="btn btn-success" data-toggle="modal"><i
+                     <a data-bs-target="#agregarRutaModal" class="btn btn-success" data-toggle="modal"><i
                            class="material-icons">&#xE147;</i> <span>Agregar Nueva Ruta</span></a>
-                     <a href="#eliminarRutaModal" class="btn btn-danger" data-toggle="modal"><i
+                     <a data-bs-target="#eliminarRutaModal" class="btn btn-danger" data-toggle="modal"><i
                            class="material-icons">&#xE15C;</i> <span>Eliminar</span></a>
                   </div>
                </div>
@@ -35,6 +35,8 @@
                      <th>Ubicación de destino</th>
                      <th>Fecha de recorrido</th>
                      <th>Éxito de la ruta</th>
+                     <th>Descripcion</th>
+                     <th>Comentarios</th>
                      <th>Acciones</th>
                   </tr>
                </thead>
@@ -46,20 +48,27 @@
                            <label for="checkbox5"></label>
                         </span>
                      </td>
+                     <td>{{ ruta.id }}</td>
                      <td>{{ ruta.nombre_ruta }}</td>
-                     <td>{{ ruta.long_empresa }}</td>
-                     <td>{{ ruta.long_destino }}</td>
+                     <td>{{ ruta.long_empresa + ", " + ruta.lat_empresa}}</td>
+                     <td>{{ ruta.long_destino + ", " + ruta.lat_destino}}</td>
                      <td>{{ ruta.fecha_recorrido }}</td>
                      <td>{{ ruta.exitoso }}</td>
+                     <td>{{ ruta.fecha_creacion }}</td>
+                     <td>{{ ruta.exitoso }}</td>
+                     <td>{{ ruta.descripcion_problema }}</td>
+                     <td>{{ ruta.comentarios }}</td>
                      <td>
                         <a class="edit" data-bs-toggle="modal" data-bs-target="#editarRutaModal"
                            (click)="capturarRuta(ruta)"><i class="material-icons" data-toggle="tooltip"
                               title="Edit">&#xE254;</i></a>
                         <a class="delete" data-bs-toggle="modal" data-bs-target="#eliminarRutaModal"
-                           (click)="capturarRuta(ruta)"><i class="material-icons" data-toggle="tooltip"
+                           (click)="capturarRuta(ruta.id)"><i class="material-icons" data-toggle="tooltip"
                               title="Delete">&#xE872;</i></a>
                      </td>
                   </tr>
+
+
                </tbody>
             </table>
             <div class="clearfix">
@@ -95,12 +104,17 @@
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Ubicación de la empresa (Longitud)</label>
                      <input type="text" class="form-control" formControlName="long_empresa" required>
+                  </div>
+                  <div class="form-group" [formGroup]="addRutaForm">
                      <label>Ubicación de la empresa (Latitud)</label>
                      <input type="text" class="form-control" formControlName="lat_empresa" required>
                   </div>
+
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Ubicación del destino (Longitud)</label>
                      <input type="text" class="form-control" formControlName="long_destino" required>
+                  </div>
+                  <div class="form-group" [formGroup]="addRutaForm">
                      <label>Ubicación del destino (Latitud)</label>
                      <input type="text" class="form-control" formControlName="lat_destino" required>
                   </div>
@@ -119,6 +133,14 @@
                   <div class="form-group" [formGroup]="addRutaForm">
                      <label>Descripción</label>
                      <input type="text-area" class="form-control" formControlName="descripcion_problema" required>
+                  </div>
+                  <div class="form-group" [formGroup]="addRutaForm">
+                     <label>Comentarios</label>
+                     <input type="text" class="form-control" formControlName="comentarios" required>
+                  </div>
+                  <div class="form-group" [formGroup]="addRutaForm">
+                     <label>idasignacion</label>
+                     <input type="text-area" class="form-control" formControlName="id_asignacion" required>
                   </div>
                </div>
                <div class="modal-footer">
@@ -137,46 +159,57 @@
             <form [formGroup]="addRutaForm">
                <div class="modal-header">
                   <h4 class="modal-title">Editar ruta</h4>
-                  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                </div>
                <div class="modal-body">
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Nombre</label>
                      <input type="text" class="form-control" placeholder="Nombre" formControlName="nombre_ruta"
                         required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Ubicación de la empresa (Longitud)</label>
                      <input type="text" class="form-control" formControlName="long_empresa" required>
+                  </div>
+                  <div class="form-group">
                      <label>Ubicación de la empresa (Latitud)</label>
                      <input type="text" class="form-control" formControlName="lat_empresa" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Ubicación del destino (Longitud)</label>
                      <input type="text" class="form-control" formControlName="long_destino" required>
+                  </div>
+                  <div class="form-group">
                      <label>Ubicación del destino (Latitud)</label>
                      <input type="text" class="form-control" formControlName="lat_destino" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Fecha de recorrido</label>
                      <input type="text" class="form-control" formControlName="fecha_recorrido" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Fecha de creación</label>
                      <input type="text" class="form-control" formControlName="fecha_creacion" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Resultado de la ruta</label>
                      <input type="text" class="form-control" formControlName="exitoso" required>
                   </div>
-                  <div class="form-group" [formGroup]="addRutaForm">
+                  <div class="form-group">
                      <label>Descripción</label>
                      <input type="text-area" class="form-control" formControlName="descripcion_problema" required>
+                  </div>
+                  <div class="form-group">
+                     <label>Comentarios</label>
+                     <input type="text" class="form-control" formControlName="comentarios" required>
+                  </div>
+                  <div class="form-group">
+                     <label>idasignacion</label>
+                     <input type="text-area" class="form-control" formControlName="id_asignacion" required>
                   </div>
 
                </div>
                <div class="modal-footer">
-                  <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+                  <input type="button" class="btn btn-default" data-bs-dismiss="modal" value="Cancelar">
                   <input type="submit" class="btn btn-info" value="Guardar">
                </div>
             </form>

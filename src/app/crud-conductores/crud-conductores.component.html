@@ -90,6 +90,9 @@
 
    <!-- Add Modal HTML -->
    <div id="addEmployeeModal" class="modal fade">
+      <ngb-toast *ngIf="showToast" [delay]="5000" (hidden)="toggleToast()" header="Notification header">
+         {{toastContent}}
+      </ngb-toast>
       <div class="modal-dialog">
          <div class="modal-content">
             <form [formGroup]="addConductorForm">

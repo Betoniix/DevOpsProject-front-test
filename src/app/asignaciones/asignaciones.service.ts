@@ -1,9 +1,10 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Respuesta } from './respuesta.interface';
 import { Asignacion } from './asignaciones.interface';
 import { Coductor } from './conductores.interface';
 import { Vehiculo } from './vehiculos.interface';
+import {catchError, throwError} from "rxjs";
 
 export type EditarAsignacion = {
   idAsignacion: number;
@@ -57,6 +58,9 @@ export class AsignacionesService {
     return this.http.post<Respuesta<Asignacion>>(
       this.url_base + '/asignaciones/crear',
       crear
-    );
+    ).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(error.error); // Return a new Observable with the error
+      }));
   }
 }

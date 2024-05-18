@@ -3,17 +3,19 @@ import { ConductorService } from '../services/conductor.service';
 import { CommonModule } from '@angular/common';
 import { Conductor } from '../interfaces/conductor.interface';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-crud-conductores',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbToast],
   templateUrl: './crud-conductores.component.html',
   styleUrl: './crud-conductores.component.css'
 })
 export class CrudConductoresComponent implements OnInit {
 
-
+  showToast:boolean = false;
+  toastContent:string = '';
   conductores: any[] | undefined;
   idConductor: any = ''; // Variable para almacenar el ID del administrador a editar
   conductorSeleccionado: Conductor | null = null;  // Objeto para almacenar los datos del administrador editado
@@ -105,10 +107,14 @@ export class CrudConductoresComponent implements OnInit {
       (error) => {
         console.log("ESTE ES EL CONDUCTOR:" + JSON.stringify(conductor));
         console.error('Error al agregar conductor:', error);
+        this.toastContent = error.message;
+        this.toggleToast();
       }
     );
   }
-
+  toggleToast() {
+    this.showToast = !this.showToast;
+  }
   actualizarConductorForm(conductor: any): void {
     if (this.conductorSeleccionado) {
       this.conductorSeleccionado = conductor;

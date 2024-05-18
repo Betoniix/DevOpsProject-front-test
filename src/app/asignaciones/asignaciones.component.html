@@ -14,6 +14,12 @@
 </head>
 
 <body>
+<ngb-toast *ngIf="showToast"
+           [delay]="5000"
+           (hidden)="toggleToast()"
+           header="Notification header">
+  {{toastContent}}
+</ngb-toast>
   <div class="container-xl">
     <div class="table-responsive">
       <div class="table-wrapper">

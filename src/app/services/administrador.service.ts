@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
 
 
@@ -15,7 +15,11 @@ export class AdministradorService {
 
   obtenerAdministradores(): Observable<any> {
     const url = `${this.apiUrl}/admin/`;
-    return this.http.get(url);
+    return this.http.get(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
   obtenerAdministrador(id: number): Observable<any> {
@@ -25,12 +29,20 @@ export class AdministradorService {
 
   editarAdministrador(id: number, administrador: Usuario): Observable<any> {
     const url = `${this.apiUrl}/admin/${id}`;
-    return this.http.put(url, administrador);
+    return this.http.put(url, administrador)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
   eliminarAdministrador(id: number): Observable<any> {
     const url = `${this.apiUrl}/admin/${id}`;
-    return this.http.delete(url);
+    return this.http.delete(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
 

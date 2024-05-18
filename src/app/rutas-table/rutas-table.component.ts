@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
 import { Ruta } from '../interfaces/ruta.interface';
@@ -13,29 +13,27 @@ import { CommonModule } from '@angular/common';
   styleUrl: './rutas-table.component.css'
 })
 export class RutasTableComponent implements OnInit {
-  rutas: Ruta[] = [];
-  formulario: FormGroup; // Define FormGroup
+  rutas: any[] | undefined;
+  idRuta: any = '';
   rutaSeleccionada: Ruta | null = null;
-  idRutas: any = '';
-  addRutaForm: any;
-  this: any;
-  addConductorForm: any;
 
-  constructor(private rutaService: RutasService, private router: Router) {
-    this.formulario = new FormGroup({ // Inicializa FormGroup
-      nombre_ruta: new FormControl(''),
-      long_empresa: new FormControl(''),
-      lat_empresa: new FormControl(''),
-      long_destino: new FormControl(''),
-      lat_destino: new FormControl(''),
-      fecha_recorrido: new FormControl(''),
-      fecha_creacion: new FormControl(''),
-      exitoso: new FormControl(''),
-      descripcion_problema: new FormControl(''),
-      comentarios: new FormControl(''),
-      id_asignacion: new FormControl(''),
-    });
-  }
+
+  public addRutaForm: FormGroup = new FormGroup({ // Inicializa FormGroup
+    nombre_ruta: new FormControl(''),
+    long_empresa: new FormControl(''),
+    lat_empresa: new FormControl(''),
+    long_destino: new FormControl(''),
+    lat_destino: new FormControl(''),
+    fecha_recorrido: new FormControl(''),
+    fecha_creacion: new FormControl(''),
+    exitoso: new FormControl(''),
+    descripcion_problema: new FormControl(''),
+    comentarios: new FormControl(''),
+    id_asignacion: new FormControl(0),
+  });
+
+
+  constructor(private rutaService: RutasService) { }
 
   ngOnInit(): void {
     this.obtenerRutas();
@@ -43,21 +41,20 @@ export class RutasTableComponent implements OnInit {
 
   capturarRuta(ruta: any) {
     this.rutaSeleccionada = ruta;
-    this.idRutas = ruta.id;
-    this.rellenarFormulario(); // Llama a rellenarFormulario() al seleccionar un administrador
+    this.actualizarRutaForm(ruta); // Llama a rellenarFormulario() al seleccionar un administrador
   }
 
   obtenerRutas(): void {
     this.rutaService.obtenerRutas().subscribe(
-      (rutas) => {
-        this.rutas = rutas.data // Accediendo correctamente a la propiedad 'data'
+      (data: any) => {
+        this.rutas = data;
+
       },
       (error) => {
         console.error('Error al obtener rutas', error);
       }
     );
   }
-
 
   eliminarRuta(id: any) {
     this.rutaService.eliminarRuta(id).subscribe(
@@ -73,7 +70,7 @@ export class RutasTableComponent implements OnInit {
 
   rellenarFormulario() {
     if (this.rutaSeleccionada) {
-      this.formulario.patchValue({ // Usa patchValue para rellenar el formulario
+      this.addRutaForm.patchValue({ // Usa patchValue para rellenar el formulario
         nombre_ruta: this.rutaSeleccionada.nombre_ruta,
         long_empresa: this.rutaSeleccionada.long_empresa,
         lat_empresa: this.rutaSeleccionada.lat_empresa,
@@ -89,22 +86,7 @@ export class RutasTableComponent implements OnInit {
     }
   }
 
-  editarAdmin() {
-    if (this.formulario.valid) {
-      const ruta = this.formulario.value;
-      this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
-        (data: Ruta) => {
-          this.rutaSeleccionada = data;
-          this.refreshPage();
-        },
-        (error) => {
-          console.error('Error al editar ruta', error);
-        }
-      );
-    } else {
-      console.error('El formulario es inválido');
-    }
-  }
+
 
   agregarRutas(): void {
 
@@ -120,7 +102,7 @@ export class RutasTableComponent implements OnInit {
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      id_asignacion: this.addRutaForm.value.id_asignacion,
     };
 
   }
@@ -162,10 +144,10 @@ export class RutasTableComponent implements OnInit {
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      id_asignacion: this.addRutaForm.value.id_asignacion,
     };
 
-    this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
+    this.rutaService.editarRutas(this.idRuta, ruta).subscribe(
       (data: Ruta) => {
         this.rutaSeleccionada = data;
         console.log(ruta);

@@ -265,3 +265,8 @@ table.table .avatar {
   text-decoration: none;
   cursor: pointer;
 }
+
+.toast{
+  position: fixed;
+  z-index: 1;
+}

@@ -272,3 +272,8 @@ table.table .avatar {
 .modal form label {
    font-weight: normal;
 }
+
+.toast{
+  position: fixed;
+  z-index: 1;
+}

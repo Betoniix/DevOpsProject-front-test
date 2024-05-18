@@ -8,17 +8,20 @@
   <app-car-modal [showModal]="showCreateCarModal" [mode]="modalMode" [data]="selectedCar"
     (formSubmit)=modalDataHandler($event) (closeModal)="closeCreateCarModal()">
   </app-car-modal>
+  <ngb-toast *ngIf="showToast" [delay]="5000" (hidden)="toggleToast()" header="Notification header">
+    {{toastContent}}
+  </ngb-toast>
   <div class="container-xl">
     <div class="table-responsive">
       <div class="table-wrapper">
         <div class="table-title">
           <div class="row">
             <div class="col-sm-6">
-              <h2>Administrar <b>Vehiculos</b></h2>
+              <h2>Manage <b>Employees</b></h2>
             </div>
             <div class="col-sm-6">
               <a (click)="openCreateCarModal()" class="btn btn-success" data-toggle="modal"><i
-                  class="material-icons">&#xE147;</i> <span>Agregar vehiculo</span></a>
+                  class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
             </div>
           </div>
         </div>
