@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { LoginService } from '../services/login.service';
 import { Router } from '@angular/router';
+import {NgIf} from "@angular/common";
+import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+    imports: [FormsModule, ReactiveFormsModule, NgIf, NgbToast],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
@@ -16,6 +18,8 @@ export class LoginComponent {
   correo = new FormControl('');
   contrasenia = new FormControl('');
   rememberMe = new FormControl(false);
+  showToast:boolean = false;
+  toastContent:string = '';
 
   constructor(private loginService: LoginService, private http: HttpClient, private router: Router) { }
 
@@ -37,11 +41,15 @@ export class LoginComponent {
       },
       (error) => {
         console.error('Error en la solicitud a la API', error);
+        this.toastContent = error.message;
+        this.toggleToast();
       }
     );
-
   }
 
+  toggleToast() {
+    this.showToast = !this.showToast;
+  }
 
 
 }

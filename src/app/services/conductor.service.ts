@@ -35,7 +35,7 @@ export class ConductorService {
       .pipe(
         catchError((error: HttpErrorResponse) => {
           return throwError(error.error); // Return a new Observable with the error
-        }));;
+        }));
   }
 
   agregarConductor(conductor: Conductor): Observable<any> {

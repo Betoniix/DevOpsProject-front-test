@@ -4,11 +4,12 @@ import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
 import { Ruta } from '../interface/ruta';
 import { CommonModule } from '@angular/common';
+import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-rutas-table',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+    imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbToast],
   templateUrl: './rutas-table.component.html',
   styleUrl: './rutas-table.component.css'
 })
@@ -20,6 +21,8 @@ export class RutasTableComponent implements OnInit{
   addRutaForm: any;
   this: any;
   addConductorForm: any;
+  showToast:boolean = false;
+  toastContent:string = '';
 
   constructor(private rutaService: RutasService, private router: Router) {
     this.formulario = new FormGroup({ // Inicializa FormGroup
@@ -54,6 +57,8 @@ export class RutasTableComponent implements OnInit{
       },
       (error) => {
         console.error('Error al obtener rutas', error);
+        this.toastContent = error.message;
+        this.toggleToast();
       }
     );
   }
@@ -66,6 +71,8 @@ export class RutasTableComponent implements OnInit{
       },
       (error) => {
         console.error('Error al eliminar administrador', error);
+        this.toastContent = error.message;
+        this.toggleToast();
       }
     );
   }
@@ -98,6 +105,8 @@ export class RutasTableComponent implements OnInit{
         },
         (error) => {
           console.error('Error al editar ruta', error);
+          this.toastContent = error.message;
+          this.toggleToast();
         }
       );
     } else {
@@ -142,7 +151,7 @@ export class RutasTableComponent implements OnInit{
         comentarios: (ruta.comentarios),
         id_asignacion: (ruta.id_asignacion)
       });
-      
+
     }
 
   }
@@ -173,8 +182,14 @@ export class RutasTableComponent implements OnInit{
       (error) => {
         console.error('Error al editar ruta', error);
         console.log(ruta);
+        this.toastContent = error.message;
+        this.toggleToast();
       }
     );
+  }
+
+  toggleToast() {
+    this.showToast = !this.showToast;
   }
 
   refreshPage() {
