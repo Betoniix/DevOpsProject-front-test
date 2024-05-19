@@ -3,13 +3,14 @@ import { AdministradorService } from '../services/administrador.service';
 import { CarService } from '../services/car.service';
 import { ConductorService } from '../services/conductor.service';
 import { RutasService } from '../services/rutas.service';
+import { NavbarComponent } from "../navbar/navbar.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.css'
+  styleUrl: './dashboard.component.css',
+  imports: [NavbarComponent]
 })
 export class DashboardComponent {
   constructor(private adminService: AdministradorService, private carService: CarService, private conductorService: ConductorService, private rutasService: RutasService) { }

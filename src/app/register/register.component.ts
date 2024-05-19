@@ -4,6 +4,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterService } from '../services/register.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +18,10 @@ export class RegisterComponent {
   contrasenia = new FormControl('');
   codigoInvitacion = new FormControl('');
 
-  constructor(private registerService: RegisterService, private http: HttpClient, private router: Router) { }
+
+  constructor(private registerService: RegisterService, private http: HttpClient, private router: Router, private appComponent: AppComponent) {
+    this.appComponent.mostrarNavbar = false;
+  }
 
   onSubmit() {
 
