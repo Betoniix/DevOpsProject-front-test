@@ -4,12 +4,12 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RegisterService } from '../services/register.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
-import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
+import { AppComponent } from '../app.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, CommonModule, ReactiveFormsModule, NgbToast],
+  imports: [FormsModule, CommonModule, ReactiveFormsModule],
   templateUrl: './register.component.html',
   styleUrl: './register.component.css'
 })
@@ -17,10 +17,11 @@ export class RegisterComponent {
   correo = new FormControl('');
   contrasenia = new FormControl('');
   codigoInvitacion = new FormControl('');
-  showToast:boolean = false;
-  toastContent:string = '';
 
-  constructor(private registerService: RegisterService, private http: HttpClient, private router: Router) { }
+
+  constructor(private registerService: RegisterService, private http: HttpClient, private router: Router, private appComponent: AppComponent) {
+    this.appComponent.mostrarNavbar = false;
+  }
 
   onSubmit() {
 
@@ -36,16 +37,12 @@ export class RegisterComponent {
       },
       (error) => {
         console.error('Error en la solicitud a la API', error);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
 
   }
 
-  toggleToast() {
-    this.showToast = !this.showToast;
-  }
+
   register() {
 
     // Obtener los valores actuales de matrícula y contraseña desde los FormControl
@@ -63,8 +60,6 @@ export class RegisterComponent {
       },
       (error) => {
         console.error('Error en la solicitud a la API', error);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
 

@@ -4,13 +4,12 @@ import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
 import { Ruta } from '../interfaces/ruta.interface';
 import { CommonModule } from '@angular/common';
-import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 import { RutaSinId } from '../interfaces/rutaSinId.interface';
 
 @Component({
   selector: 'app-rutas-table',
   standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbToast],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './rutas-table.component.html',
   styleUrl: './rutas-table.component.css'
 })
@@ -18,28 +17,26 @@ export class RutasTableComponent implements OnInit {
   rutas: any[] | undefined;
   idRuta: any = '';
   rutaSeleccionada: Ruta | null = null;
-  idRutas: any = '';
-  addRutaForm: any;
-  this: any;
-  addConductorForm: any;
-  showToast:boolean = false;
-  toastContent:string = '';
+  toastContent: string = '';
+  showToast: boolean = false;
 
-  constructor(private rutaService: RutasService, private router: Router) {
-    this.formulario = new FormGroup({ // Inicializa FormGroup
-      nombre_ruta: new FormControl(''),
-      long_empresa: new FormControl(''),
-      lat_empresa: new FormControl(''),
-      long_destino: new FormControl(''),
-      lat_destino: new FormControl(''),
-      fecha_recorrido: new FormControl(''),
-      fecha_creacion: new FormControl(''),
-      exitoso: new FormControl(''),
-      descripcion_problema: new FormControl(''),
-      comentarios: new FormControl(''),
-      id_asignacion: new FormControl(''),
-    });
-  }
+
+  public addRutaForm: FormGroup = new FormGroup({ // Inicializa FormGroup
+    nombre_ruta: new FormControl(''),
+    long_empresa: new FormControl(''),
+    lat_empresa: new FormControl(''),
+    long_destino: new FormControl(''),
+    lat_destino: new FormControl(''),
+    fecha_recorrido: new FormControl(''),
+    fecha_creacion: new FormControl(''),
+    exitoso: new FormControl(''),
+    descripcion_problema: new FormControl(''),
+    comentarios: new FormControl(''),
+    id_asignacion: new FormControl(0),
+  });
+
+
+  constructor(private rutaService: RutasService) { }
 
   ngOnInit(): void {
     this.obtenerRutas();
@@ -69,8 +66,6 @@ export class RutasTableComponent implements OnInit {
       },
       (error) => {
         console.error('Error al obtener rutas', error);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
   }
@@ -82,8 +77,6 @@ export class RutasTableComponent implements OnInit {
         this.refreshPage();
       },
       (error) => {
-        this.toastContent = error.message;
-        this.toggleToast();
         console.error('Error al eliminar ruta', error);
       }
     );
@@ -107,24 +100,6 @@ export class RutasTableComponent implements OnInit {
     }
   }
 
-  editarAdmin() {
-    if (this.formulario.valid) {
-      const ruta = this.formulario.value;
-      this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
-        (data: Ruta) => {
-          this.rutaSeleccionada = data;
-          this.refreshPage();
-        },
-        (error) => {
-          console.error('Error al editar ruta', error);
-          this.toastContent = error.message;
-          this.toggleToast();
-        }
-      );
-    } else {
-      console.error('El formulario es inválido');
-    }
-  }
   agregarRutas(): void {
 
     const ruta: Ruta = {
@@ -210,14 +185,8 @@ export class RutasTableComponent implements OnInit {
         console.error('Error al editar ruta', error);
         console.log("Esta es la id" + ruta.id);
         console.log(ruta);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
-  }
-
-  toggleToast() {
-    this.showToast = !this.showToast;
   }
 
   refreshPage() {

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Usuario } from '../interfaces/usuario.interface';
-import {catchError, Observable, throwError} from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,11 +14,7 @@ export class LoginService {
 
   login(usuario: Usuario): Observable<any> {
     const url = `${this.apiUrl}/login`;
-    return this.http.post(url, usuario)
-    .pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(error.error);
-      }));
+    return this.http.post(url, usuario);
   }
 
   // Método para almacenar el token en el localStorage

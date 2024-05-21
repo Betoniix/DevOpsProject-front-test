@@ -4,12 +4,11 @@ import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms'; // Importa FormGroup
 import { Usuario } from '../interfaces/usuario.interface';
 import { Router } from '@angular/router';
-import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
 
 @Component({
   selector: 'app-crud-admins',
   standalone: true,
-    imports: [CommonModule, FormsModule, ReactiveFormsModule, NgbToast],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule],
   templateUrl: './crud-admins.component.html',
   styleUrl: './crud-admins.component.css'
 })
@@ -18,8 +17,6 @@ export class CrudAdminsComponent implements OnInit {
   formulario: FormGroup; // Define FormGroup
   administradorSeleccionado: Usuario | null = null;
   idAdministrador: any = '';
-  showToast:boolean = false;
-  toastContent:string = '';
 
   constructor(private administradorService: AdministradorService, private router: Router) {
     this.formulario = new FormGroup({ // Inicializa FormGroup
@@ -45,8 +42,6 @@ export class CrudAdminsComponent implements OnInit {
       },
       (error) => {
         console.error('Error al obtener administradores', error);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
   }
@@ -59,8 +54,6 @@ export class CrudAdminsComponent implements OnInit {
       },
       (error) => {
         console.error('Error al eliminar administrador', error);
-        this.toastContent = error.message;
-        this.toggleToast();
       }
     );
   }
@@ -84,17 +77,11 @@ export class CrudAdminsComponent implements OnInit {
         },
         (error) => {
           console.error('Error al editar administrador', error);
-          this.toastContent = error.message;
-          this.toggleToast();
         }
       );
     } else {
       console.error('El formulario es inválido');
     }
-  }
-
-  toggleToast() {
-    this.showToast = !this.showToast;
   }
 
   refreshPage() {
