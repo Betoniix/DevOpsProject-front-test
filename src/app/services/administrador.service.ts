@@ -1,6 +1,6 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {catchError, Observable, throwError} from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
 
 

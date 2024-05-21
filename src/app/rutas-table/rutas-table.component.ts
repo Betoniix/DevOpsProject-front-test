@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RutasService } from '../services/rutas.service';
 import { Router } from '@angular/router';
-import { Ruta } from '../interface/ruta';
+import { Ruta } from '../interfaces/ruta.interface';
 import { CommonModule } from '@angular/common';
 import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
+import { RutaSinId } from '../interfaces/rutaSinId.interface';
 
 @Component({
   selector: 'app-rutas-table',
@@ -13,9 +14,9 @@ import {NgbToast} from "@ng-bootstrap/ng-bootstrap";
   templateUrl: './rutas-table.component.html',
   styleUrl: './rutas-table.component.css'
 })
-export class RutasTableComponent implements OnInit{
+export class RutasTableComponent implements OnInit {
   rutas: any[] | undefined;
-  formulario: FormGroup; // Define FormGroup
+  idRuta: any = '';
   rutaSeleccionada: Ruta | null = null;
   idRutas: any = '';
   addRutaForm: any;
@@ -46,14 +47,25 @@ export class RutasTableComponent implements OnInit{
 
   capturarRuta(ruta: any) {
     this.rutaSeleccionada = ruta;
-    this.idRutas = ruta.id;
-    this.rellenarFormulario(); // Llama a rellenarFormulario() al seleccionar un administrador
+    this.idRuta = ruta.id;
+    console.log("esta es la ruta sleccionada" + this.idRuta);
+    this.actualizarRutaForm(ruta); // Llama a rellenarFormulario() al seleccionar un administrador
+  }
+
+  capturarId(id: string) {
+    this.idRuta = id;
+  }
+
+  resetRuta(): void {
+    this.addRutaForm.reset();
   }
 
   obtenerRutas(): void {
     this.rutaService.obtenerRutas().subscribe(
       (data: any) => {
         this.rutas = data;
+        console.log(this.rutas);
+
       },
       (error) => {
         console.error('Error al obtener rutas', error);
@@ -70,16 +82,16 @@ export class RutasTableComponent implements OnInit{
         this.refreshPage();
       },
       (error) => {
-        console.error('Error al eliminar administrador', error);
         this.toastContent = error.message;
         this.toggleToast();
+        console.error('Error al eliminar ruta', error);
       }
     );
   }
 
   rellenarFormulario() {
     if (this.rutaSeleccionada) {
-      this.formulario.patchValue({ // Usa patchValue para rellenar el formulario
+      this.addRutaForm.patchValue({ // Usa patchValue para rellenar el formulario
         nombre_ruta: this.rutaSeleccionada.nombre_ruta,
         long_empresa: this.rutaSeleccionada.long_empresa,
         lat_empresa: this.rutaSeleccionada.lat_empresa,
@@ -90,7 +102,7 @@ export class RutasTableComponent implements OnInit{
         exitoso: this.rutaSeleccionada.exitoso,
         descripcion_problema: this.rutaSeleccionada.descripcion_problema,
         comentarios: this.rutaSeleccionada.comentarios,
-        id_asignacion: this.rutaSeleccionada.id_asignacion
+        id_asignacion: this.rutaSeleccionada.id_asignacion,
       });
     }
   }
@@ -113,7 +125,6 @@ export class RutasTableComponent implements OnInit{
       console.error('El formulario es inválido');
     }
   }
-
   agregarRutas(): void {
 
     const ruta: Ruta = {
@@ -123,14 +134,31 @@ export class RutasTableComponent implements OnInit{
       lat_empresa: this.addRutaForm.value.lat_empresa,
       long_destino: this.addRutaForm.value.long_destino,
       lat_destino: this.addRutaForm.value.lat_destino,
-      fecha_recorrido: this.addRutaForm.value.fecha_recorrido,
-      fecha_creacion: this.addRutaForm.value.fecha_creacion,
-      exitoso: this.addRutaForm.value.exitoso,
+      fecha_recorrido: new Date(this.addRutaForm.value.fecha_recorrido).toISOString(),
+      fecha_creacion: new Date(this.addRutaForm.value.fecha_creacion).toISOString(),
+      exitoso: Boolean(Number(this.addRutaForm.value.exitoso)),
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
       comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      id_asignacion: parseInt(this.addRutaForm.value.id_asignacion),
     };
+    console.log(ruta);
 
+    this.rutaService.agregarRutas(ruta).subscribe(
+      (data: any) => {
+        console.log('Ruta agregada exitosamente:', data);
+        this.refreshPage();
+      },
+      (error: any) => {
+        console.log("ESTA ES LA RUTA:" + JSON.stringify(ruta));
+        console.error('Error al agregar ruta:', error);
+        this.toastContent = error.message;
+        this.toggleToast();
+      }
+    );
+
+  }
+  toggleToast() {
+    this.showToast = !this.showToast;
   }
 
   actualizarRutaForm(ruta: any): void {
@@ -158,8 +186,8 @@ export class RutasTableComponent implements OnInit{
 
   editarRuta(id: any) {
     // Verificar si this.conductorSeleccionado no es nulo
-    const ruta: Ruta = {
-      id: this.addRutaForm.value.id,
+    const ruta: RutaSinId = {
+      id: id,
       nombre_ruta: this.addRutaForm.value.nombre_ruta,
       long_empresa: this.addRutaForm.value.long_empresa,
       lat_empresa: this.addRutaForm.value.lat_empresa,
@@ -169,11 +197,10 @@ export class RutasTableComponent implements OnInit{
       fecha_creacion: this.addRutaForm.value.fecha_creacion,
       exitoso: this.addRutaForm.value.exitoso,
       descripcion_problema: this.addRutaForm.value.descripcion_problema,
-      comentarios: this.addRutaForm.value.comentarios,
-      id_asignacion: this.this.addRutaForm.value.id_asignacion,
+      comentarios: this.addRutaForm.value.comentarios
     };
 
-    this.rutaService.editarRutas(this.idRutas, ruta).subscribe(
+    this.rutaService.editarRutas(this.idRuta, ruta).subscribe(
       (data: Ruta) => {
         this.rutaSeleccionada = data;
         console.log(ruta);
@@ -181,6 +208,7 @@ export class RutasTableComponent implements OnInit{
       },
       (error) => {
         console.error('Error al editar ruta', error);
+        console.log("Esta es la id" + ruta.id);
         console.log(ruta);
         this.toastContent = error.message;
         this.toggleToast();
@@ -194,5 +222,6 @@ export class RutasTableComponent implements OnInit{
 
   refreshPage() {
     window.location.reload();
-  };
+  }
+
 }

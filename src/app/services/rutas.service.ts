@@ -1,21 +1,29 @@
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import {catchError, Observable, throwError} from 'rxjs';
-import { Ruta } from '../interface/ruta';
+import { Observable, catchError, map, throwError } from 'rxjs';
+import { Ruta } from '../interfaces/ruta.interface';
+import { Respuesta } from '../asignaciones/respuesta.interface';
+import { RutaSinId } from '../interfaces/rutaSinId.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RutasService {
-  agregarRutas(ruta: Ruta) {
-    throw new Error('Method not implemented.');
+  agregarRutas(ruta: Ruta): Observable<any> {
+    const url = `${this.apiUrl}/rutas`;
+    return this.http.post(url, ruta)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }));
   }
 
   constructor(private http: HttpClient) { }
 
   private apiUrl = "http://localhost:3301";
 
-  obtenerRutas(): Observable<any> {
+
+  obtenerRutas() {
     const url = `${this.apiUrl}/rutas/`;
     return this.http.get(url)
       .pipe(
@@ -23,6 +31,7 @@ export class RutasService {
           return throwError(error.error); // Return a new Observable with the error
         }))
   }
+
 
   obtenerRuta(id: number): Observable<any> {
     const url = `${this.apiUrl}/rutas/${id}`;
@@ -33,7 +42,7 @@ export class RutasService {
         }))
   }
 
-  editarRutas(id: number, ruta: Ruta): Observable<any> {
+  editarRutas(id: number, ruta: RutaSinId): Observable<any> {
     const url = `${this.apiUrl}/rutas/${id}`;
     return this.http.put(url, ruta)
       .pipe(

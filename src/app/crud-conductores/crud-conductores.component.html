@@ -4,13 +4,8 @@
    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 
+
 <body>
-<ngb-toast *ngIf="showToast"
-           [delay]="5000"
-           (hidden)="toggleToast()"
-           header="Notification header">
-  {{toastContent}}
-</ngb-toast>
    <div class="container-xl">
       <div class="table-responsive ">
          <div class="table-wrapper">
@@ -96,6 +91,9 @@
 
    <!-- Add Modal HTML -->
    <div id="addEmployeeModal" class="modal fade">
+      <ngb-toast *ngIf="showToast" [delay]="5000" (hidden)="toggleToast()" header="Notification header">
+         {{toastContent}}
+      </ngb-toast>
       <div class="modal-dialog">
          <div class="modal-content">
             <form [formGroup]="addConductorForm">

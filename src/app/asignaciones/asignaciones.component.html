@@ -1,25 +1,13 @@
 <head>
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round"
-  />
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/icon?family=Material+Icons"
-  />
-  <link
-    rel="stylesheet"
-    href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
-  />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
 </head>
 
 <body>
-<ngb-toast *ngIf="showToast"
-           [delay]="5000"
-           (hidden)="toggleToast()"
-           header="Notification header">
-  {{toastContent}}
-</ngb-toast>
+  <ngb-toast *ngIf="showToast" [delay]="5000" (hidden)="toggleToast()" header="Notification header">
+    {{toastContent}}
+  </ngb-toast>
   <div class="container-xl">
     <div class="table-responsive">
       <div class="table-wrapper">
@@ -29,12 +17,8 @@
               <h2>Asignaciones</h2>
             </div>
             <div class="col-sm-6">
-              <a
-                (click)="AbrirNuevaAsignacionModal(nuevo)"
-                class="btn btn-success"
-                data-toggle="modal"
-                ><i class="material-icons">&#xE147;</i> <span>Añadir</span></a
-              >
+              <a (click)="AbrirNuevaAsignacionModal(nuevo)" class="btn btn-success" data-toggle="modal"><i
+                  class="material-icons">&#xE147;</i> <span>Añadir</span></a>
             </div>
           </div>
         </div>
@@ -58,12 +42,7 @@
             <tr>
               <td>
                 <span class="custom-checkbox">
-                  <input
-                    type="checkbox"
-                    id="checkbox1"
-                    name="options[]"
-                    value="1"
-                  />
+                  <input type="checkbox" id="checkbox1" name="options[]" value="1" />
                   <label for="checkbox1"></label>
                 </span>
               </td>
@@ -71,25 +50,10 @@
               <td>{{ asignacion.vehiculo.placa }}</td>
               <td>{{ asignacion.ruta.nombre_ruta ?? "Sin ruta" }}</td>
               <td>
-                <a
-                  (click)="AbrirEditarModal(editar, asignacion)"
-                  class="edit"
-                  data-toggle="modal"
-                  ><i class="material-icons" data-toggle="tooltip" title="Edit"
-                    >&#xE254;</i
-                  ></a
-                >
-                <a
-                  (click)="EliminarAsignacion(asignacion.id)"
-                  class="delete"
-                  data-toggle="modal"
-                  ><i
-                    class="material-icons"
-                    data-toggle="tooltip"
-                    title="Delete"
-                    >&#xE872;</i
-                  ></a
-                >
+                <a (click)="AbrirEditarModal(editar, asignacion)" class="edit" data-toggle="modal"><i
+                    class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+                <a (click)="EliminarAsignacion(asignacion.id)" class="delete" data-toggle="modal"><i
+                    class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
               </td>
             </tr>
             }
@@ -99,16 +63,11 @@
     </div>
   </div>
 </body>
-
+<!--edit modal-->
 <ng-template #editar let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Editar asignacion</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
     <form>
@@ -117,10 +76,7 @@
         <div class="input-group">
           <select name="conductorSelect" [(ngModel)]="idConductor">
             @for(conductor of conductores; track conductor.id) {
-            <option
-              [value]="conductor.id"
-              [selected]="conductor.id.toString() === idConductor"
-            >
+            <option [value]="conductor.id" [selected]="conductor.id.toString() === idConductor">
               {{ conductor.nombres }}
             </option>
             }
@@ -132,10 +88,7 @@
           <select name="vehiculoSelect" [(ngModel)]="idVehiculo">
             @for(vehiculo of vehiculos; track vehiculo.id) {
 
-            <option
-              [value]="vehiculo.id"
-              [selected]="vehiculo.id.toString() === idVehiculo"
-            >
+            <option [value]="vehiculo.id" [selected]="vehiculo.id.toString() === idVehiculo">
               {{ vehiculo.placa }}
             </option>
             }
@@ -146,25 +99,18 @@
   </div>
 
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="modal.close('Save click')"
-    >
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">
       Save
     </button>
   </div>
 </ng-template>
 
+<!--add modal-->
+
 <ng-template #nuevo let-modal>
   <div class="modal-header">
     <h4 class="modal-title" id="modal-basic-title">Crear asignacion</h4>
-    <button
-      type="button"
-      class="btn-close"
-      aria-label="Close"
-      (click)="modal.dismiss()"
-    ></button>
+    <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss()"></button>
   </div>
   <div class="modal-body">
     <form>
@@ -197,11 +143,7 @@
   </div>
 
   <div class="modal-footer">
-    <button
-      type="button"
-      class="btn btn-outline-dark"
-      (click)="modal.close('Save click')"
-    >
+    <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">
       Save
     </button>
   </div>
