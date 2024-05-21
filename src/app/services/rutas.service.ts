@@ -25,23 +25,38 @@ export class RutasService {
 
   obtenerRutas() {
     const url = `${this.apiUrl}/rutas/`;
-    return this.http.get<Ruta[]>(url).pipe(map((response: any) => response.data));
+    return this.http.get(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
-
 
 
   obtenerRuta(id: number): Observable<any> {
     const url = `${this.apiUrl}/rutas/${id}`;
-    return this.http.get(url);
+    return this.http.get(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
 
   editarRutas(id: number, ruta: RutaSinId): Observable<any> {
     const url = `${this.apiUrl}/rutas/${id}`;
-    return this.http.put(url, ruta);
+    return this.http.put(url, ruta)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
 
   eliminarRuta(id: number): Observable<any> {
     const url = `${this.apiUrl}/rutas/${id}`;
-    return this.http.delete(url);
+    return this.http.delete(url)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
 }

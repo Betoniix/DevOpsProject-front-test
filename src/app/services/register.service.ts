@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import {catchError, Observable, throwError} from 'rxjs';
 import { Usuario } from '../interfaces/usuario.interface';
 import { Codigo } from '../interfaces/codigo.interface';
 
@@ -15,12 +15,20 @@ export class RegisterService {
 
   preRegister(usuario: Usuario): Observable<any> {
     const url = `${this.apiUrl}/register/pre`;
-    return this.http.post(url, usuario);
+    return this.http.post(url, usuario)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
 
   register(codigo: Codigo): Observable<any> {
     const url = `${this.apiUrl}/register`;
-    return this.http.post(url, codigo);
+    return this.http.post(url, codigo)
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(error.error); // Return a new Observable with the error
+        }))
   }
 
   // Método para obtener el token del localStorage
