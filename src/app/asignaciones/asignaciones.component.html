@@ -31,6 +31,7 @@
                   <label for="selectAll"></label>
                 </span>
               </th>
+              <th>Id</th>
               <th>Conductor</th>
               <th>Vehiculo</th>
               <th>Ruta</th>
@@ -46,6 +47,7 @@
                   <label for="checkbox1"></label>
                 </span>
               </td>
+              <td>{{ asignacion.id}}</td>
               <td>{{ asignacion.conductor.nombre }}</td>
               <td>{{ asignacion.vehiculo.placa }}</td>
               <td>{{ asignacion.ruta.nombre_ruta ?? "Sin ruta" }}</td>
