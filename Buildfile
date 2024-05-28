@@ -4,7 +4,6 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'cd DevOpsProject-front/'
                 sh 'npm install @angular/cli --save-dev'
                 sh 'npm install'
             }
