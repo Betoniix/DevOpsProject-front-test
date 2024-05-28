@@ -26,8 +26,10 @@ pipeline {
                                 ng serve
                             EOF
                         """, returnStatus: true  // Capture exit code for error handling
+
                         if (result != 0) {
-                            error 'Deployment failed!'
+                            error 'Deployment failed! Exit code: ' + result
+                            // Optionally perform additional actions like sending notifications
                         } else {
                             echo 'Deployment successful!'
                         }
