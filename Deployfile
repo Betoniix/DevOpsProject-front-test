@@ -1,14 +1,18 @@
 pipeline {
     agent any
     stages {
-        stage('SSH to VM') {
+        stage('Deploy to VM') {
             steps {
-                sshagent(['credenciales-ssh']) { // Define tus credenciales SSH en Jenkins
+                sshagent(['credenciales-ssh']) {
                     sh """
                     ssh -o StrictHostKeyChecking=no cisco@192.168.100.42 << 'EOF'
-                    npm install @angular/cli --save-dev
-                    npm install
-                    ng serve
+                        cd Desktop/
+                        git clone https://github.com/CL-Nayib/DevOpsProject-front.git .
+                        cd DevOpsProject-front || exit 1
+                        git switch develop
+                        npm install -g @angular/cli
+                        npm install
+                        ng serve 
                     EOF
                     """
                 }
