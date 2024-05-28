@@ -1,0 +1,47 @@
+pipeline {
+    agent any
+
+    environment {
+        BRANCH_NAME_CLEANED = sh(script: 'echo $GIT_BRANCH | sed \'s/origin\\///\'', returnStdout: true).trim()
+        DOCKER_IMAGE = "frontend-${BRANCH_NAME_CLEANED}:1.0.0-${BUILD_NUMBER}"
+        IMAGE_TAR = "frontend-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER}.tar"
+        DEPLOY_SERVER = 'user@ip-de-tu-maquina-virtual'
+    }
+
+    stages {
+        stage('Download Docker Image') {
+            steps {
+                copyArtifacts(projectName: 'nombre-del-pipeline-de-construccion', filter: "${IMAGE_TAR}")
+            }
+        }
+        stage('Transfer Docker Image') {
+            steps {
+                sh "scp ${IMAGE_TAR} ${DEPLOY_SERVER}:~/"
+            }
+        }
+        stage('Load Docker Image') {
+            steps {
+                sh "ssh ${DEPLOY_SERVER} docker load -i ~/${IMAGE_TAR}"
+            }
+        }
+        stage('Stop Previous Containers') {
+            steps {
+                sh "ssh ${DEPLOY_SERVER} docker ps -q --filter 'name=frontend-${BRANCH_NAME_CLEANED}' | xargs -r docker stop"
+            }
+        }
+        stage('Remove Stopped Containers') {
+            steps {
+                sh "ssh ${DEPLOY_SERVER} docker ps -a -q --filter 'name=frontend-${BRANCH_NAME_CLEANED}' | xargs -r docker rm"
+            }
+        }
+        stage('Run Docker Container') {
+            steps {
+                sh """
+                ssh ${DEPLOY_SERVER} << EOF
+                docker run -d -p 4200:80 --name frontend-${BRANCH_NAME_CLEANED}-${BUILD_NUMBER} ${DOCKER_IMAGE}
+                EOF
+                """
+            }
+        }
+    }
+}
