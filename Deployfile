@@ -10,8 +10,8 @@ pipeline {
             steps {
                 script {
                     sshagent(['credenciales-ssh']) {
-                        sh """
-                        ssh -tt -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
+                        sh '''
+                        ssh -tt -o StrictHostKeyChecking=no ${env.REMOTE_HOST} <<'EOF'
                         echo "Conexión SSH exitosa"
                         cd Desktop/
                         git clone https://github.com/CL-Nayib/DevOpsProject-front.git
@@ -21,7 +21,7 @@ pipeline {
                         npm install
                         ng serve
                         EOF
-                        """
+                        '''
                     }
                 }
             }
