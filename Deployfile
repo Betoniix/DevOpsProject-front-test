@@ -1,20 +1,37 @@
 pipeline {
-    agent any
+    agent any  // Consider using a dedicated agent with tools pre-installed
+
+    environment {
+        // Define environment variables for clarity and reusability
+        VM_IP = '192.168.100.42'
+        VM_USER = 'cisco'
+        REPO_URL = 'https://github.com/CL-Nayib/DevOpsProject-front.git'
+        BRANCH_NAME = 'develop'  // Or use dynamic branch selection
+    }
+
     stages {
         stage('Deploy to VM') {
             steps {
                 sshagent(['credenciales-ssh']) {
-                    sh '''
-                    ssh -o StrictHostKeyChecking=no cisco@192.168.100.42 << 'EOF'
-                        cd Desktop/
-                        git clone https://github.com/CL-Nayib/DevOpsProject-front.git .
-                        cd DevOpsProject-front || exit 1
-                        git switch develop
-                        npm install -g @angular/cli
-                        npm install
-                        ng serve
-                    EOF
-                    '''
+                    script {
+                        // Use environment variables and handle errors
+                        def result = sh script: """
+                            ssh -o UserKnownHostsFile=/dev/null ${VM_USER}@${VM_IP} << 'EOF'
+                                cd /path/to/project  // Replace with actual project directory
+                                git clone ${REPO_URL} .
+                                cd DevOpsProject-front || exit 1
+                                git checkout ${BRANCH_NAME}
+                                npm install -g @angular/cli
+                                npm install
+                                ng serve
+                            EOF
+                        """, returnStatus: true  // Capture exit code for error handling
+                        if (result != 0) {
+                            error 'Deployment failed!'
+                        } else {
+                            echo 'Deployment successful!'
+                        }
+                    }
                 }
             }
         }
