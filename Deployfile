@@ -11,7 +11,7 @@ pipeline {
                 script {
                     sshagent(['credenciales-ssh']) {
                         sh """
-                        ssh -t -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
+                        ssh -tt -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
                         echo "Conexión SSH exitosa"
                         cd Desktop/
                         git clone https://github.com/CL-Nayib/DevOpsProject-front.git
