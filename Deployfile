@@ -5,8 +5,7 @@ pipeline {
             steps {
                 script {
                     sshagent(['credenciales-ssh']) {
-                        sh '''
-                        ssh -tt cisco@192.168.100.42 <<'EOF'
+                        sh """ssh -tt cisco@192.168.100.42 << EOF 
                         echo "Conexión SSH exitosa"
                         cd Desktop/
                         git clone https://github.com/CL-Nayib/DevOpsProject-front.git
@@ -15,8 +14,8 @@ pipeline {
                         npm install -g @angular/cli
                         npm install
                         ng serve
-                        EOF
-                        '''
+                        exit
+    EOF"""
                     }
                 }
             }
