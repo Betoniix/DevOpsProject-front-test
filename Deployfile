@@ -4,7 +4,7 @@ pipeline {
         stage('Deploy to VM') {
             steps {
                 sshagent(['credenciales-ssh']) {
-                    sh """
+                    sh '''
                     ssh -o StrictHostKeyChecking=no cisco@192.168.100.42 << 'EOF'
                         cd Desktop/
                         git clone https://github.com/CL-Nayib/DevOpsProject-front.git .
@@ -12,9 +12,9 @@ pipeline {
                         git switch develop
                         npm install -g @angular/cli
                         npm install
-                        ng serve 
+                        ng serve
                     EOF
-                    """
+                    '''
                 }
             }
         }
