@@ -1,38 +1,27 @@
 pipeline {
-    agent any  // Consider using a dedicated agent with tools pre-installed
+    agent any
 
     environment {
-        // Define environment variables for clarity and reusability
-        VM_IP = '192.168.100.42'
-        VM_USER = 'cisco'
-        REPO_URL = 'https://github.com/CL-Nayib/DevOpsProject-front.git'
-        BRANCH_NAME = 'develop'  // Or use dynamic branch selection
+        REMOTE_HOST = 'cisco@192.168.100.42'  // Reemplaza con la IP o hostname de tu VM
     }
 
     stages {
-        stage('Deploy to VM') {
+        stage('SSH Commands') {
             steps {
-                sshagent(['credenciales-ssh']) {
-                    script {
-                        // Use environment variables and handle errors
-                        def result = sh script: """
-                            ssh -o UserKnownHostsFile=/dev/null ${VM_USER}@${VM_IP} << 'EOF'
-                                cd /path/to/project  // Replace with actual project directory
-                                git clone ${REPO_URL} .
-                                cd DevOpsProject-front || exit 1
-                                git checkout ${BRANCH_NAME}
-                                npm install -g @angular/cli
-                                npm install
-                                ng serve
-                            EOF
-                        """, returnStatus: true  // Capture exit code for error handling
-
-                        if (result != 0) {
-                            error 'Deployment failed! Exit code: ' + result
-                            // Optionally perform additional actions like sending notifications
-                        } else {
-                            echo 'Deployment successful!'
-                        }
+                script {
+                    sshagent(['credenciales-ssh']) {
+                        sh """
+                        ssh -t -o StrictHostKeyChecking=no ${env.REMOTE_HOST} << EOF
+                        echo "Conexión SSH exitosa"
+                        cd Desktop/
+                        git clone https://github.com/CL-Nayib/DevOpsProject-front.git
+                        cd DevOpsProject-front || exit 1
+                        git switch develop
+                        npm install -g @angular/cli
+                        npm install
+                        ng serve
+                        EOF
+                        """
                     }
                 }
             }
