@@ -12,7 +12,7 @@ pipeline {
         stage('Build front') {
             steps {
                 script {
-                    if (-d "./DevOpsProject-front") {
+                    if (-d "DevOpsProject-front") {
                         sh 'echo existe'
                         sh 'cd DevOpsProject-front && git pull'
                     } else {
