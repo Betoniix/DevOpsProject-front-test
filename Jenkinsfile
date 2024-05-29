@@ -13,7 +13,8 @@ pipeline {
             steps {
                     // Clonar el repositorio en la carpeta Documents
                   //  sh 'sshpass -p "1" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11 "cd Documents && git clone https://github.com/CL-Nayib/DevOpsProject-front.git && cd DevOpsProject-front && npm i && npm run build"'
-                  sh 'ls'
+                  sh 'git clone https://github.com/CL-Nayib/DevOpsProject-front.git'
+                  sh 'scp -r ./DevOpsProject-front ubu@192.168.0.11:/home/ubu/Documents'
             }
         }
     }
