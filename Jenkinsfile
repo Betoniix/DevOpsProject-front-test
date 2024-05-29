@@ -13,6 +13,7 @@ pipeline {
             steps {
                 script{
                     if [ -d "./DevOpsProject-front" ]; then
+                        sh 'echo existe'
                         sh 'cd DevOpsProject-front && git pull'
                     else
                         sh 'git clone https://github.com/CL-Nayib/DevOpsProject-front.git'
