@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Connect ssh') {
             steps {
-                sh "h "sshpass -p '1' ssh -o StrictHostKeyChecking=no ubu@192.168.0.11"
+                sh 'sshpass -p "1" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11'
             }
         }
 
