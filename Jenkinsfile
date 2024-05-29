@@ -3,16 +3,20 @@ pipeline {
     stages {
         stage('Connect ssh') {
             steps {
-                sh 'sshpass -p "1" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11'
-                sh 'ls'
+                script {
+                    sh 'sshpass -p "tu_contraseña" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11'
+                }
             }
         }
 
         stage('Build front') {
             steps {
-                sh "cd Documents && git clone https://github.com/CL-Nayib/DevOpsProject-front.git"
-                sh "cd DevOpsProject-front"
-                sh "npm i && npm run build"
+                    // Clonar el repositorio en la carpeta Documents
+                    sh 'sshpass -p "tu_contraseña" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11 "cd Documents && git clone https://github.com/CL-Nayib/DevOpsProject-front.git"'
+                    // Ingresar al directorio clonado
+                    sh 'sshpass -p "tu_contraseña" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11 "cd Documents/DevOpsProject-front"'
+                    // Instalar dependencias y construir
+                    sh 'sshpass -p "tu_contraseña" ssh -o StrictHostKeyChecking=no ubu@192.168.0.11 "npm i && npm run build"'
             }
         }
     }
