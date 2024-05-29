@@ -11,17 +11,7 @@ pipeline {
 
         stage('Build front') {
             steps {
-                script {
-                    if [ -d "DevOpsProject-front" ] 
-                    then
-                        sh 'echo existe'
-                        sh 'cd DevOpsProject-front && git pull'
-                    else
-                        sh 'git clone https://github.com/CL-Nayib/DevOpsProject-front.git'
-                    fi
-
-                    sh 'sshpass -p "1" scp -r ./DevOpsProject-front ubu@192.168.0.11:/home/ubu/Documents'
-                }
+                sh 'sh ./deploy.sh'
             }
         }
     }
